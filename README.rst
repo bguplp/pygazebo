@@ -61,3 +61,12 @@ local machine on the default port.
   
   loop = trollius.get_event_loop()
   loop.run_until_complete(publish_loop())
+
+Troubleshoot
+------------
+
+Force pip to instal protobuf with python2:
+
+.. code-block:: bash
+
+  $ python -m pip install protobuf
