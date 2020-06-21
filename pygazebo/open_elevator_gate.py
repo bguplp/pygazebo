@@ -48,7 +48,7 @@ floor = rospy.myargv(argv=sys.argv)
 if len(floor) == 2:
     rospy.loginfo("Opening the elevator gate")
 else:
-    rospy.logwarn("Too much arguments in floor_num: "+ str(len(floor)))
+    rospy.logwarn("floor_num should be 0 or 1, but it contain: "+ str(len(floor)))
 
 loop = trollius.get_event_loop()
 loop.run_until_complete(setObject(floor[1]))
