@@ -6,7 +6,6 @@ import sys
 import pygazebo
 import trollius
 from trollius import From
-from pygazebo_ros_gazebo_elevator.srv import ser_message # ,ser_messageResponse
 
 #import rospkg
 #rospack = rospkg.RosPack()
