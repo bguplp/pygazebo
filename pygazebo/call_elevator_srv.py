@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
 import rospy
-import sys
 import pygazebo
 import trollius
 from trollius import From
 from msg.gz_string_pb2 import GzString
+from pygazebo_ros_gazebo_elevator.srv import CallElevator, CallElevatorResponse
 
 
 @trollius.coroutine
@@ -21,12 +21,17 @@ def setObject(floor):
         yield From(trollius.sleep(1.0))
 
 
+def callback_function(req):
+    res = "false"
+    loop = trollius.new_event_loop()
+    trollius.set_event_loop(loop)
+    loop.run_until_complete(setObject(req.floor_num))
+    res = "true"
+    return CallElevatorResponse(res)
+
+
 if __name__ == '__main__':
-    floor = rospy.myargv(argv=sys.argv)
-    if len(floor) == 2:
-        rospy.loginfo("Opening the elevator gate")
-    else:
-        rospy.logwarn("floor_num should be 0 or 1, but it contain: "
-                      + str(len(floor)))
-    loop = trollius.get_event_loop()
-    loop.run_until_complete(setObject(floor[1]))
+    rospy.init_node("call_elevator_node", anonymous=True)
+    rospy.Service("call_elevator", CallElevator, callback_function)
+    rospy.loginfo("Call elevator service, waiting for request")
+    rospy.spin()
