@@ -35,21 +35,21 @@ repeatedly to control a single joint in a Gazebo model running on the
 local machine on the default port.
 
 .. code-block:: python
-  
+
   import trollius
   from trollius import From
-  
+
   import pygazebo
   import pygazebo.msg.joint_cmd_pb2
-  
+
   @trollius.coroutine
   def publish_loop():
       manager = yield From(pygazebo.connect())
-      
+
       publisher = yield From(
           manager.advertise('/gazebo/default/model/joint_cmd',
                             'gazebo.msgs.JointCmd'))
-  
+
       message = pygazebo.msg.joint_cmd_pb2.JointCmd()
       message.name = 'robot::joint_name'
       message.axis = 0
@@ -58,9 +58,17 @@ local machine on the default port.
       while True:
           yield From(publisher.publish(message))
           yield From(trollius.sleep(1.0))
-  
+
   loop = trollius.get_event_loop()
   loop.run_until_complete(publish_loop())
+
+
+Call an elevator in Gazebo simulation, explanation
+--------------------------------------------------
+.. code-block:: bash
+
+  rosrun pygazebo_ros_gazebo_elevator call_elevator_srv.py
+  rosservice call /call_elevator "floor_num: <choose_floor_number>"
 
 Troubleshoot
 ------------
